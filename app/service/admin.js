@@ -12,7 +12,6 @@ class AdminService extends Service {
     }
     return user;
   }
-  
 }
 
 module.exports = AdminService;

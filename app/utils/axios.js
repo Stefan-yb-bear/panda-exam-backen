@@ -2,7 +2,7 @@ const axios = require('axios');
 
 // 创建 Axios 实例
 const httpClient = axios.create({
-  baseURL: 'https://api.weixin.qq.com', // 设置基础URL
+  baseURL: '', // 设置基础URL
   timeout: 5000, // 设置超时时间
   headers: {
     'Content-Type': 'application/json;charset=utf-8',

@@ -3,6 +3,7 @@
  */
 module.exports = app => {
   const { router, controller } = app;
-  
-  router.get('/', controller.admin.index);
+  router.post('/login', controller.admin.login);
+  router.post('/reg', controller.admin.registry);
+
 };

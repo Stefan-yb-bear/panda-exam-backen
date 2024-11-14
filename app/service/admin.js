@@ -1,4 +1,5 @@
 const { Service } = require('egg');
+const md5 = require('../utils/md5');
 
 class AdminService extends Service {
   /**
@@ -25,6 +26,19 @@ class AdminService extends Service {
       return false;
     }
     return user;
+  }
+
+
+  async addAdmin(userInfo) {
+    const result = await this.app.mysql.insert('admin', {
+      phone: userInfo.phone,
+      password: md5.getMd5Data(userInfo.password),
+      name: `用户${userInfo.phone}`,
+    });
+    if (result) {
+      return true;
+    }
+    return false;
   }
 }
 

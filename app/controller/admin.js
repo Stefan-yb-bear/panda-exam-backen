@@ -1,6 +1,5 @@
 const BaseController = require('./base');
 const md5 = require('../utils/md5');
-const { phone } = require('../utils/zz');
 class AdminController extends BaseController {
 
 
@@ -24,7 +23,7 @@ class AdminController extends BaseController {
         const token = this.app.jwt.sign({ phone: isExit.phone }, this.app.config.jwt.secret);
         // 登录成功设置 最近登录次数为0
         await ctx.service.redis.set(userInfo.phone, 0, 60 * 30);
-        this.success(token);
+        this.success(`Bearer ${token}`);
       } else {
         // 登录失败 最近登录次数+1
         await ctx.service.redis.set(userInfo.phone, loginTimes + 1, 60 * 30);
@@ -48,11 +47,7 @@ class AdminController extends BaseController {
     if (isExit) {
       this.fail('用户已存在');
     } else {
-      const result = await this.app.mysql.insert('admin', {
-        phone: userInfo.phone,
-        password: md5.getMd5Data(userInfo.password),
-        name: `用户${userInfo.phone}`,
-      });
+      const result = await ctx.service.admin.addAdmin(userInfo);
       if (result) {
         this.success('注册成功');
       } else {

@@ -17,4 +17,10 @@ module.exports = app => {
     }
   });
 
+  validator.addRule('email', (rule, value) => {
+    if (!zz.email.test(value)) {
+      return '邮箱格式错误';
+    }
+  });
+
 };

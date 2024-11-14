@@ -13,7 +13,6 @@ module.exports = () => {
         };
         return;
       }
-      console.warn(err);
       if (err.code === 'invalid_param') {
         ctx.status = 200;
         ctx.body = {
@@ -23,6 +22,17 @@ module.exports = () => {
         };
         return;
       }
+      if (err.message === 'invalid token') {
+        ctx.status = 200;
+        ctx.body = {
+          code: 401,
+          msg: '身份失效',
+          data: err.message,
+        };
+        return;
+      }
+      console.warn(',==========', err);
+
       // 最后其他异常统一处理
       ctx.status = 500;
       ctx.body = {

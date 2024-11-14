@@ -1,5 +1,6 @@
 const BaseController = require('./base');
 const md5 = require('../utils/md5');
+const { phone } = require('../utils/zz');
 class AdminController extends BaseController {
 
 
@@ -20,7 +21,7 @@ class AdminController extends BaseController {
     if (isExit) {
       const md5Data = md5.getMd5Data(userInfo.password);
       if (md5Data === isExit.password) {
-        const token = this.app.jwt.sign({ name: isExit.name }, this.app.config.jwt.secret);
+        const token = this.app.jwt.sign({ phone: isExit.phone }, this.app.config.jwt.secret);
         // 登录成功设置 最近登录次数为0
         await ctx.service.redis.set(userInfo.phone, 0, 60 * 30);
         this.success(token);
@@ -50,12 +51,34 @@ class AdminController extends BaseController {
       const result = await this.app.mysql.insert('admin', {
         phone: userInfo.phone,
         password: md5.getMd5Data(userInfo.password),
+        name: `用户${userInfo.phone}`,
       });
       if (result) {
         this.success('注册成功');
       } else {
         this.fail('注册失败');
       }
+    }
+  }
+
+  async me() {
+    const { ctx } = this;
+    const token = ctx.request.header.authorization?.slice(7);
+    if (!token) {
+      this.fail();
+    }
+    let userInfo = this.app.jwt.decode(token);
+    userInfo = await ctx.service.admin.getUserInfo(userInfo);
+    if (userInfo) {
+      this.success({
+        phone: userInfo.phone,
+        name: userInfo.name,
+        email: userInfo.email,
+        update_time: userInfo.update_time,
+        create_time: userInfo.create_time,
+      });
+    } else {
+      this.fail('用户不存在');
     }
   }
 }

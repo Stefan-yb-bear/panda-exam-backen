@@ -1,7 +1,7 @@
 module.exports = {
   mysql: {
     enable: true,
-    package: 'egg-mysql'
+    package: 'egg-mysql',
   },
   jwt: {
     enable: true,
@@ -9,10 +9,14 @@ module.exports = {
   },
   redis: {
     enable: true,
-    package: 'egg-redis'
+    package: 'egg-redis',
   },
-  validate:{
+  validate: {
     enable: true,
     package: 'egg-validate',
   },
-}
+  cors: {
+    enable: true,
+    package: 'egg-cors',
+  },
+};

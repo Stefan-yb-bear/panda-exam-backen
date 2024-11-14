@@ -6,4 +6,5 @@ module.exports = app => {
   router.post('/login', controller.admin.login);
   router.post('/reg', controller.admin.registry);
 
+  router.get('/me', controller.admin.me);
 };

@@ -9,4 +9,8 @@ module.exports = app => {
 
   router.post('/user/add', controller.user.addUser);
   router.post('/user/del', controller.user.delUser);
+  router.post('/user/update', controller.user.updateUser);
+  router.get('/user/get', controller.user.getUser);
+
+
 };

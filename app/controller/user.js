@@ -36,6 +36,51 @@ class UserController extends BaseController {
       this.fail('删除失败');
     }
   }
+
+  async updateUser() {
+    const { ctx } = this;
+    ctx.validate({
+      phone: { type: 'phone' },
+      email: { type: 'email' },
+      name: { type: 'string' },
+    });
+    const userInfo = ctx.request.body;
+    const isExit = await ctx.service.user.isExit(userInfo);
+    if (isExit) {
+      userInfo.id = isExit.id;
+      Object.assign(isExit, userInfo);
+      const res = await ctx.service.user.updateUser(isExit);
+      if (res) {
+        this.success('修改成功');
+      } else {
+        this.fail('修改失败');
+      }
+    } else {
+      this.fail('用户不存在');
+    }
+  }
+
+  async getUser() {
+    const { ctx } = this;
+    const data = ctx.query;
+    const { id, pageNum, pageSize, name = '' } = data;
+    if (!id) {
+      const res = await ctx.service.user.getUsersInfo(Number(pageNum), Number(pageSize), name);
+      if (res) {
+        this.success(res);
+      } else {
+        this.fail('用户不存在');
+      }
+    } else {
+      const res = await ctx.service.user.getUserInfo(id);
+      if (res) {
+        this.success(res);
+      } else {
+        this.fail('用户不存在');
+      }
+    }
+
+  }
 }
 
 module.exports = UserController;

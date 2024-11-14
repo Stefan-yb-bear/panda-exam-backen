@@ -21,6 +21,21 @@ class UserController extends BaseController {
       this.fail('添加失败');
     }
   }
+
+  async delUser() {
+    const { ctx } = this;
+    const ids = ctx.request.body;
+    if (!ids || !(ids instanceof Array)) {
+      this.fail('参数错误');
+      return;
+    }
+    const result = await ctx.service.user.delUser(ids);
+    if (result) {
+      this.success('删除成功');
+    } else {
+      this.fail('删除失败');
+    }
+  }
 }
 
 module.exports = UserController;

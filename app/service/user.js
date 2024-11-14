@@ -15,6 +15,16 @@ class UserService extends Service {
     return false;
   }
 
+  async delUser(ids) {
+    const res = await this.app.mysql.query(
+      `delete from user where id in (${ids.join(',')})`
+    );
+    if (res) {
+      return true;
+    }
+    return false;
+  }
+
   async isExit(userInfo) {
     const res = await this.app.mysql.get('user', { phone: userInfo.phone });
     if (res) {

@@ -20,7 +20,7 @@ class AdminController extends BaseController {
     if (isExit) {
       const md5Data = md5.getMd5Data(userInfo.password);
       if (md5Data === isExit.password) {
-        const token = this.app.jwt.sign({ phone: isExit.phone }, this.app.config.jwt.secret);
+        const token = this.app.jwt.sign({ id: isExit.id, phone: isExit.phone }, this.app.config.jwt.secret);
         // 登录成功设置 最近登录次数为0
         await ctx.service.redis.set(userInfo.phone, 0, 60 * 30);
         this.success(`Bearer ${token}`);
@@ -66,11 +66,10 @@ class AdminController extends BaseController {
     userInfo = await ctx.service.admin.getUserInfo(userInfo);
     if (userInfo) {
       this.success({
+        id: userInfo.id,
         phone: userInfo.phone,
         name: userInfo.name,
         email: userInfo.email,
-        update_time: userInfo.update_time,
-        create_time: userInfo.create_time,
       });
     } else {
       this.fail('用户不存在');

@@ -21,7 +21,7 @@ class AdminService extends Service {
    * @return
    */
   async getUserInfo(userInfo) {
-    const user = await this.app.mysql.get('admin', { phone: userInfo.phone });
+    const user = await this.app.mysql.get('admin', { id: userInfo.id });
     if (!user) {
       return false;
     }

@@ -12,5 +12,7 @@ module.exports = app => {
   router.post('/user/update', controller.user.updateUser);
   router.get('/user/get', controller.user.getUser);
 
-
+  router.post('/bank/addTag', controller.bank.addTag);
+  router.post('/bank/updateTag', controller.bank.updateTag);
+  router.get('/bank/getTag', controller.bank.getTags);
 };
